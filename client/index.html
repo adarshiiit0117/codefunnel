@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FileShop — Premium Digital Files</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #f5f4fc;
+        color: #1a1a2e;
+      }
+
+      /* ── Topbar ── */
+      .topbar {
+        background: #26215C;
+        color: #EEEDFE;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 12px rgba(38,33,92,0.18);
+      }
+      .topbar-logo {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+      .topbar-logo span { color: #AFA9EC; }
+      .topbar-nav {
+        display: flex;
+        gap: 28px;
+        align-items: center;
+      }
+      .topbar-nav a {
+        color: #CECBF6;
+        font-size: 14px;
+        text-decoration: none;
+        transition: color 0.15s;
+      }
+      .topbar-nav a:hover { color: #fff; }
+      .topbar-icons {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+      }
+      .topbar-icons i {
+        font-size: 20px;
+        color: #CECBF6;
+        cursor: pointer;
+        transition: color 0.15s;
+      }
+      .topbar-icons i:hover { color: #fff; }
+      .cart-badge {
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+        color: inherit;
+        cursor: pointer;
+      }
+      .cart-badge i {
+        font-size: 20px;
+        color: #CECBF6;
+        transition: color 0.15s;
+      }
+      .cart-badge:hover i { color: #fff; }
+      .badge-dot {
+        position: absolute;
+        top: -5px; right: -7px;
+        background: #D85A30;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        border-radius: 50%;
+        width: 17px; height: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #26215C;
+      }
+
+      /* ── Search bar ── */
+      .searchbar {
+        background: #3C3489;
+        padding: 14px 32px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .searchbar input {
+        flex: 1;
+        background: #26215C;
+        border: 1.5px solid #534AB7;
+        color: #EEEDFE;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 15px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      .searchbar input::placeholder { color: #7F77DD; }
+      .searchbar input:focus { border-color: #AFA9EC; }
+      .search-btn {
+        background: #D85A30;
+        border: none;
+        color: #fff;
+        padding: 10px 24px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        transition: background 0.15s;
+      }
+      .search-btn:hover { background: #993C1D; }
+
+      /* ── Hero ── */
+      .hero {
+        background: linear-gradient(120deg, #EEEDFE 0%, #dde8fb 100%);
+        padding: 48px 32px;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+      .hero-text { flex: 1; }
+      .hero-badge {
+        display: inline-block;
+        background: #534AB7;
+        color: #EEEDFE;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 14px;
+        border-radius: 20px;
+        margin-bottom: 14px;
+        letter-spacing: 0.04em;
+      }
+      .hero-text h1 {
+        font-size: 34px;
+        font-weight: 800;
+        color: #26215C;
+        line-height: 1.25;
+        margin-bottom: 12px;
+      }
+      .hero-text p {
+        font-size: 16px;
+        color: #534AB7;
+        margin-bottom: 24px;
+      }
+      .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+      .btn-hero {
+        background: #534AB7;
+        color: #fff;
+        border: none;
+        padding: 13px 30px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s, transform 0.1s;
+      }
+      .btn-hero:hover { background: #3C3489; transform: translateY(-1px); }
+      .btn-hero-outline {
+        background: transparent;
+        color: #534AB7;
+        border: 2px solid #534AB7;
+        padding: 13px 30px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .btn-hero-outline:hover { background: #EEEDFE; }
+      .hero-visual {
+        width: 200px;
+        height: 150px;
+        background: #3C3489;
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        flex-shrink: 0;
+        box-shadow: 0 8px 32px rgba(38,33,92,0.2);
+      }
+      .hero-visual i { font-size: 52px; color: #AFA9EC; }
+      .hero-visual span { font-size: 13px; color: #7F77DD; font-weight: 500; }
+
+      /* ── Categories ── */
+      .cats {
+        padding: 20px 32px;
+        background: #fff;
+        border-bottom: 1px solid #e8e6f7;
+      }
+      .cats-label {
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .cat-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+      .cat-pill {
+        background: #f5f4fc;
+        border: 1.5px solid #e0ddf5;
+        border-radius: 24px;
+        padding: 7px 18px;
+        font-size: 14px;
+        color: #3C3489;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.15s, border-color 0.15s;
+        user-select: none;
+      }
+      .cat-pill:hover { background: #EEEDFE; border-color: #AFA9EC; }
+      .cat-pill.active { background: #EEEDFE; border-color: #7F77DD; color: #26215C; font-weight: 600; }
+      .cat-pill i { font-size: 16px; }
+
+      /* ── Section header ── */
+      .section-head {
+        padding: 28px 32px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .section-head h2 { font-size: 20px; font-weight: 700; color: #26215C; }
+      .see-all {
+        font-size: 14px;
+        color: #534AB7;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .see-all:hover { text-decoration: underline; }
+
+      /* ── Products grid ── */
+      .products {
+        padding: 0 32px 28px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        gap: 18px;
+      }
+      .product-card {
+        background: #fff;
+        border: 1.5px solid #e8e6f7;
+        border-radius: 14px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+      }
+      .product-card:hover {
+        border-color: #7F77DD;
+        box-shadow: 0 6px 24px rgba(83,74,183,0.13);
+        transform: translateY(-3px);
+      }
+      .product-thumb {
+        height: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 44px;
+      }
+      .product-info { padding: 12px; }
+      .product-name { font-size: 14px; font-weight: 600; color: #26215C; margin-bottom: 4px; }
+      .product-type { font-size: 12px; color: #888; margin-bottom: 8px; }
+      .product-footer { display: flex; align-items: center; justify-content: space-between; }
+      .product-price { font-size: 16px; font-weight: 700; color: #534AB7; }
+      .add-btn {
+        background: #534AB7;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        width: 30px; height: 30px;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s, transform 0.1s;
+      }
+      .add-btn:hover { background: #3C3489; transform: scale(1.1); }
+      .product-badge {
+        display: inline-block;
+        background: #FAECE7;
+        color: #993C1D;
+        font-size: 10px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        letter-spacing: 0.03em;
+      }
+
+      /* ── Promo banner ── */
+      .banner {
+        margin: 0 32px 28px;
+        background: linear-gradient(120deg, #3C3489 0%, #26215C 100%);
+        border-radius: 16px;
+        padding: 28px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        box-shadow: 0 4px 20px rgba(38,33,92,0.15);
+      }
+      .banner-text h3 { font-size: 18px; font-weight: 700; color: #EEEDFE; margin-bottom: 6px; }
+      .banner-text p { font-size: 14px; color: #AFA9EC; }
+      .banner-btn {
+        background: #EF9F27;
+        color: #412402;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background 0.15s;
+        flex-shrink: 0;
+      }
+      .banner-btn:hover { background: #FAC775; }
+
+      /* ── Footer ── */
+      footer {
+        background: #26215C;
+        color: #AFA9EC;
+        padding: 32px;
+      }
+      .footer-top {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-bottom: 24px;
+      }
+      .footer-brand .logo { font-size: 20px; font-weight: 700; color: #EEEDFE; margin-bottom: 6px; }
+      .footer-brand .logo span { color: #AFA9EC; }
+      .footer-brand p { font-size: 13px; color: #7F77DD; max-width: 200px; }
+      .footer-col h4 { font-size: 13px; font-weight: 700; color: #CECBF6; margin-bottom: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+      .footer-col a { display: block; font-size: 13px; color: #7F77DD; text-decoration: none; margin-bottom: 6px; transition: color 0.15s; }
+      .footer-col a:hover { color: #EEEDFE; }
+      .footer-bottom {
+        border-top: 1px solid #3C3489;
+        padding-top: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .footer-bottom span { font-size: 13px; color: #534AB7; }
+
+      /* ── Toast ── */
+      .toast {
+        position: fixed;
+        bottom: 28px;
+        left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #26215C;
+        color: #EEEDFE;
+        padding: 10px 24px;
+        border-radius: 24px;
+        font-size: 14px;
+        font-weight: 500;
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 999;
+        box-shadow: 0 4px 16px rgba(38,33,92,0.25);
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 600px) {
+        .topbar { padding: 10px 16px; }
+        .topbar-nav { display: none; }
+        .searchbar { padding: 10px 16px; }
+        .hero { padding: 28px 16px; flex-direction: column; }
+        .hero-visual { width: 100%; }
+        .cats { padding: 14px 16px; }
+        .section-head { padding: 20px 16px 10px; }
+        .products { padding: 0 16px 20px; }
+        .banner { margin: 0 16px 20px; flex-direction: column; text-align: center; }
+        footer { padding: 24px 16px; }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Topbar -->
+    <nav class="topbar">
+      <div class="topbar-logo">File<span>Shop</span></div>
+      <div class="topbar-nav">
+        <a href="#">Home</a>
+        <a href="#">Browse</a>
+        <a href="#">Deals</a>
+        <a href="#">Sell</a>
+        <a href="#">Support</a>
+      </div>
+      <div class="topbar-icons">
+        <i class="ti ti-search"></i>
+        <i class="ti ti-heart"></i>
+        <!-- Cart icon now links to cart.html -->
+        <a href="./cart.html" class="cart-badge">
+          <i class="ti ti-shopping-cart"></i>
+          <div class="badge-dot" id="cart-count">0</div>
+        </a>
+        <i class="ti ti-user"></i>
+      </div>
+    </nav>
+
+    <!-- Search -->
+    <div class="searchbar">
+      <input type="text" id="search-input" placeholder="Search templates, fonts, icons, videos, audio..." />
+      <button class="search-btn" id="search-btn">
+        <i class="ti ti-search"></i> Search
+      </button>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-badge">&#10024; New arrivals every week</div>
+        <h1>Premium digital files for every project</h1>
+        <p>Templates, fonts, icons, videos &amp; more — instant download</p>
+        <div class="hero-btns">
+          <button class="btn-hero">Shop now</button>
+          <button class="btn-hero-outline">Browse free files</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <i class="ti ti-files"></i>
+        <span>50,000+ files</span>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <div class="cats">
+      <div class="cats-label">Browse by category</div>
+      <div class="cat-pills">
+        <div class="cat-pill active" data-cat="all"><i class="ti ti-layout-grid"></i> All</div>
+        <div class="cat-pill" data-cat="templates"><i class="ti ti-file-text"></i> Templates</div>
+        <div class="cat-pill" data-cat="fonts"><i class="ti ti-letter-case"></i> Fonts</div>
+        <div class="cat-pill" data-cat="photos"><i class="ti ti-photo"></i> Photos</div>
+        <div class="cat-pill" data-cat="icons"><i class="ti ti-star"></i> Icons</div>
+        <div class="cat-pill" data-cat="video"><i class="ti ti-video"></i> Video</div>
+        <div class="cat-pill" data-cat="audio"><i class="ti ti-music"></i> Audio</div>
+        <div class="cat-pill" data-cat="mockups"><i class="ti ti-brand-adobe"></i> Mockups</div>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div class="section-head">
+      <h2>Bestsellers</h2>
+      <a class="see-all" href="#">See all &rarr;</a>
+    </div>
+
+    <div class="products" id="products">
+
+      <div class="product-card" data-name="Business Deck Pro" data-price="12" data-cat="templates">
+        <div class="product-thumb" style="background:#EEEDFE;">
+          <i class="ti ti-presentation" style="color:#534AB7; font-size:44px;"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-badge">Bestseller</div>
+          <div class="product-name">Business Deck Pro</div>
+          <div class="product-type">PowerPoint template</div>
+          <div class="product-footer">
+            <span class="product-price">$12</span>
+            <button class="add-btn" aria-label="Add to cart"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-name="Minimal Sans Font" data-price="9" data-cat="fonts">
+        <div class="product-thumb" style="background:#E1F5EE;">
+          <i class="ti ti-letter-a" style="color:#0F6E56; font-size:44px;"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Minimal Sans Font</div>
+          <div class="product-type">Font family &middot; OTF + TTF</div>
+          <div class="product-footer">
+            <span class="product-price" style="color:#0F6E56;">$9</span>
+            <button class="add-btn" style="background:#0F6E56;" aria-label="Add to cart"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-name="Icon Pack 500" data-price="15" data-cat="icons">
+        <div class="product-thumb" style="background:#FAEEDA;">
+          <i class="ti ti-star" style="color:#854F0B; font-size:44px;"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-badge" style="background:#FAEEDA;color:#633806;">Popular</div>
+          <div class="product-name">Icon Pack 500</div>
+          <div class="product-type">SVG &middot; 500 icons</div>
+          <div class="product-footer">
+            <span class="product-price" style="color:#854F0B;">$15</span>
+            <button class="add-btn" style="background:#854F0B;" aria-label="Add to cart"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-name="Resume Bundle" data-price="7" data-cat="templates">
+        <div class="product-thumb" style="background:#FAECE7;">
+          <i class="ti ti-id-badge" style="color:#993C1D; font-size:44px;"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Resume Bundle</div>
+          <div class="product-type">Word + PDF &middot; 10 files</div>
+          <div class="product-footer">
+            <span class="product-price" style="color:#993C1D;">$7</span>
+            <button class="add-btn" style="background:#993C1D;" aria-label="Add to cart"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-name="Cinematic LUTs" data-price="19" data-cat="video">
+        <div class="product-thumb" style="background:#E6F1FB;">
+          <i class="ti ti-movie" style="color:#185FA5; font-size:44px;"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Cinematic LUTs</div>
+          <div class="product-type">Color grading &middot; .cube</div>
+          <div class="product-footer">
+            <span class="product-price" style="color:#185FA5;">$19</span>
+            <button class="add-btn" style="background:#185FA5;" aria-label="Add to cart"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-name="Logo Mockup Kit" data-price="11" data-cat="mockups">
+        <div class="product-thumb" style="background:#EAF3DE;">
+          <i class="ti ti-brand-adobe" style="color:#3B6D11; font-size:44px;"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Logo Mockup Kit</div>
+          <div class="product-type">PSD &middot; 20 scenes</div>
+          <div class="product-footer">
+            <span class="product-price" style="color:#3B6D11;">$11</span>
+            <button class="add-btn" style="background:#3B6D11;" aria-label="Add to cart"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-name="Nature Photo Pack" data-price="8" data-cat="photos">
+        <div class="product-thumb" style="background:#FBEAF0;">
+          <i class="ti ti-photo" style="color:#993556; font-size:44px;"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Nature Photo Pack</div>
+          <div class="product-type">JPG &middot; 4K &middot; 30 photos</div>
+          <div class="product-footer">
+            <span class="product-price" style="color:#993556;">$8</span>
+            <button class="add-btn" style="background:#993556;" aria-label="Add to cart"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card" data-name="Ambient Music Pack" data-price="14" data-cat="audio">
+        <div class="product-thumb" style="background:#f5f4fc;">
+          <i class="ti ti-music" style="color:#534AB7; font-size:44px;"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-name">Ambient Music Pack</div>
+          <div class="product-type">MP3 + WAV &middot; 20 tracks</div>
+          <div class="product-footer">
+            <span class="product-price">$14</span>
+            <button class="add-btn" aria-label="Add to cart"><i class="ti ti-plus" style="font-size:16px;"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Promo banner -->
+    <div class="banner">
+      <div class="banner-text">
+        <h3>Unlimited downloads — 3 months free</h3>
+        <p>Access 50,000+ premium files, cancel any time. No commitment.</p>
+      </div>
+      <button class="banner-btn">Try for $1 &rarr;</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-top">
+        <div class="footer-brand">
+          <div class="logo">File<span>Shop</span></div>
+          <p>The marketplace for premium digital files &amp; creative assets.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Explore</h4>
+          <a href="#">Templates</a>
+          <a href="#">Fonts</a>
+          <a href="#">Icons</a>
+          <a href="#">Photos</a>
+        </div>
+        <div class="footer-col">
+          <h4>Account</h4>
+          <a href="#">Sign in</a>
+          <a href="#">Register</a>
+          <a href="#">My downloads</a>
+          <a href="#">Wishlist</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Sell with us</a>
+          <a href="#">Careers</a>
+        </div>
+        <div class="footer-col">
+          <h4>Help</h4>
+          <a href="#">Support</a>
+          <a href="#">Licensing</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 FileShop. All rights reserved.</span>
+        <span>Made with &#9829; for creators everywhere</span>
+      </div>
+    </footer>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Your original tracker script (intact) -->
+    <script src="./tracker.js"></script>
+
+    <!-- Site interaction script -->
+    <script>
+      (function () {
+        var countEl = document.getElementById('cart-count');
+        var toast = document.getElementById('toast');
+        var toastTimer;
+
+        function showToast(msg) {
+          toast.textContent = msg;
+          toast.classList.add('show');
+          clearTimeout(toastTimer);
+          toastTimer = setTimeout(function () {
+            toast.classList.remove('show');
+          }, 2500);
+        }
+
+        // ── Restore cart count from localStorage on page load ──
+        var cart = JSON.parse(localStorage.getItem('fileshop_cart') || '[]');
+        countEl.textContent = cart.length;
+
+        // Add to cart buttons
+        document.querySelectorAll('.add-btn').forEach(function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var card = btn.closest('.product-card');
+            var name  = card.dataset.name;
+            var price = parseInt(card.dataset.price);
+            var cat   = card.dataset.cat;
+            var type  = card.querySelector('.product-type') ? card.querySelector('.product-type').textContent : '';
+
+            // Save item to localStorage so cart.html can read it
+            cart = JSON.parse(localStorage.getItem('fileshop_cart') || '[]');
+            cart.push({ name: name, price: price, cat: cat, type: type });
+            localStorage.setItem('fileshop_cart', JSON.stringify(cart));
+
+            countEl.textContent = cart.length;
+            showToast('\u2713 ' + name + ' ($' + price + ') added to cart');
+          });
+        });
+
+        // Category filter
+        document.querySelectorAll('.cat-pill').forEach(function (pill) {
+          pill.addEventListener('click', function () {
+            document.querySelectorAll('.cat-pill').forEach(function (p) {
+              p.classList.remove('active');
+            });
+            pill.classList.add('active');
+            var cat = pill.dataset.cat;
+            document.querySelectorAll('.product-card').forEach(function (card) {
+              if (cat === 'all' || card.dataset.cat === cat) {
+                card.style.display = '';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+          });
+        });
+
+        // Search
+        document.getElementById('search-btn').addEventListener('click', function () {
+          var query = document.getElementById('search-input').value.trim();
+          if (query) showToast('Searching for "' + query + '"...');
+        });
+        document.getElementById('search-input').addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            var query = this.value.trim();
+            if (query) showToast('Searching for "' + query + '"...');
+          }
+        });
+      })();
+    </script>
+
+  </body>
+</html>

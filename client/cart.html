@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart — FileShop</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f4fc; color: #1a1a2e; min-height: 100vh; }
+
+      /* Topbar */
+      .topbar { background: #26215C; color: #EEEDFE; padding: 12px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(38,33,92,0.18); }
+      .topbar-logo { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; text-decoration: none; color: #EEEDFE; }
+      .topbar-logo span { color: #AFA9EC; }
+      .back-btn { display: flex; align-items: center; gap: 8px; color: #CECBF6; font-size: 14px; text-decoration: none; transition: color 0.15s; cursor: pointer; background: none; border: none; }
+      .back-btn:hover { color: #fff; }
+
+      /* Page layout */
+      .page { max-width: 960px; margin: 0 auto; padding: 36px 24px; }
+      .page-title { font-size: 26px; font-weight: 800; color: #26215C; margin-bottom: 6px; }
+      .page-sub { font-size: 14px; color: #7F77DD; margin-bottom: 32px; }
+
+      .cart-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+      @media (max-width: 700px) { .cart-layout { grid-template-columns: 1fr; } }
+
+      /* Cart items */
+      .cart-items { display: flex; flex-direction: column; gap: 14px; }
+      .cart-item {
+        background: #fff;
+        border: 1.5px solid #e8e6f7;
+        border-radius: 14px;
+        padding: 16px 18px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: border-color 0.15s, box-shadow 0.15s;
+      }
+      .cart-item:hover { border-color: #AFA9EC; box-shadow: 0 4px 16px rgba(83,74,183,0.08); }
+      .item-thumb {
+        width: 60px; height: 60px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 28px;
+        flex-shrink: 0;
+      }
+      .item-info { flex: 1; min-width: 0; }
+      .item-name { font-size: 15px; font-weight: 600; color: #26215C; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .item-type { font-size: 12px; color: #888; }
+      .item-price { font-size: 17px; font-weight: 700; color: #534AB7; white-space: nowrap; margin-right: 4px; }
+      .remove-btn {
+        background: none; border: none; color: #ccc; cursor: pointer;
+        width: 32px; height: 32px; border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 18px; transition: color 0.15s, background 0.15s;
+      }
+      .remove-btn:hover { color: #D85A30; background: #FAECE7; }
+
+      /* Empty state */
+      .empty {
+        background: #fff;
+        border: 1.5px dashed #e0ddf5;
+        border-radius: 16px;
+        padding: 64px 32px;
+        display: flex; flex-direction: column; align-items: center; gap: 14px;
+        text-align: center;
+      }
+      .empty i { font-size: 52px; color: #ccc; }
+      .empty h3 { font-size: 18px; font-weight: 700; color: #26215C; }
+      .empty p { font-size: 14px; color: #888; }
+      .empty a { display: inline-block; margin-top: 8px; background: #534AB7; color: #fff; padding: 11px 28px; border-radius: 10px; font-size: 14px; font-weight: 600; text-decoration: none; transition: background 0.15s; }
+      .empty a:hover { background: #3C3489; }
+
+      /* Order summary */
+      .summary {
+        background: #fff;
+        border: 1.5px solid #e8e6f7;
+        border-radius: 16px;
+        padding: 24px;
+        position: sticky;
+        top: 80px;
+      }
+      .summary h3 { font-size: 16px; font-weight: 700; color: #26215C; margin-bottom: 20px; }
+      .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #555; margin-bottom: 12px; }
+      .summary-row.total { font-size: 18px; font-weight: 700; color: #26215C; border-top: 1.5px solid #e8e6f7; padding-top: 14px; margin-top: 4px; }
+      .summary-row.total span:last-child { color: #534AB7; }
+      .coupon-row { display: flex; gap: 8px; margin-bottom: 20px; }
+      .coupon-row input {
+        flex: 1; background: #f5f4fc; border: 1.5px solid #e0ddf5; border-radius: 8px;
+        padding: 8px 12px; font-size: 13px; color: #26215C; outline: none;
+        transition: border-color 0.2s;
+      }
+      .coupon-row input:focus { border-color: #AFA9EC; }
+      .coupon-row button {
+        background: #EEEDFE; border: none; border-radius: 8px;
+        padding: 8px 14px; font-size: 13px; font-weight: 600; color: #534AB7;
+        cursor: pointer; transition: background 0.15s;
+      }
+      .coupon-row button:hover { background: #dddaf5; }
+      .checkout-btn {
+        width: 100%; background: #534AB7; color: #fff; border: none;
+        border-radius: 12px; padding: 15px; font-size: 16px; font-weight: 700;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        gap: 8px; transition: background 0.15s, transform 0.1s;
+      }
+      .checkout-btn:hover { background: #3C3489; transform: translateY(-1px); }
+      .checkout-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+      .secure-note { display: flex; align-items: center; gap: 6px; justify-content: center; margin-top: 12px; font-size: 12px; color: #999; }
+
+      /* Toast */
+      .toast {
+        position: fixed; bottom: 28px; left: 50%;
+        transform: translateX(-50%) translateY(20px);
+        background: #26215C; color: #EEEDFE;
+        padding: 10px 24px; border-radius: 24px;
+        font-size: 14px; font-weight: 500;
+        opacity: 0; transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none; white-space: nowrap; z-index: 999;
+        box-shadow: 0 4px 16px rgba(38,33,92,0.25);
+      }
+      .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    </style>
+  </head>
+  <body>
+
+    <nav class="topbar">
+      <a href="./index.html" class="topbar-logo">File<span>Shop</span></a>
+      <a href="./index.html" class="back-btn">
+        <i class="ti ti-arrow-left"></i> Continue shopping
+      </a>
+    </nav>
+
+    <div class="page">
+      <h1 class="page-title">Your Cart</h1>
+      <p class="page-sub" id="cart-sub">Loading...</p>
+
+      <div class="cart-layout">
+        <!-- Left: items -->
+        <div id="cart-items-container"></div>
+
+        <!-- Right: summary -->
+        <div class="summary" id="summary-box">
+          <h3>Order Summary</h3>
+          <div class="summary-row"><span>Subtotal</span><span id="s-subtotal">$0</span></div>
+          <div class="summary-row"><span>Discount</span><span id="s-discount" style="color:#0F6E56;">–$0</span></div>
+          <div class="summary-row total"><span>Total</span><span id="s-total">$0</span></div>
+          <div class="coupon-row">
+            <input type="text" id="coupon-input" placeholder="Coupon code" />
+            <button id="coupon-btn">Apply</button>
+          </div>
+          <button class="checkout-btn" id="checkout-btn">
+            <i class="ti ti-lock"></i> Checkout
+          </button>
+          <div class="secure-note">
+            <i class="ti ti-shield-check" style="font-size:14px;"></i>
+            Secure checkout · Instant download
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      // ── Read cart from localStorage (written by index.html) ──
+      var cart = JSON.parse(localStorage.getItem('fileshop_cart') || '[]');
+      var discount = 0;
+
+      var container = document.getElementById('cart-items-container');
+      var subEl     = document.getElementById('cart-sub');
+      var toast     = document.getElementById('toast');
+      var toastTimer;
+
+      // Thumb styles per category
+      var thumbStyles = {
+        templates: { bg: '#EEEDFE', color: '#534AB7', icon: 'ti-file-text' },
+        fonts:     { bg: '#E1F5EE', color: '#0F6E56', icon: 'ti-letter-a' },
+        icons:     { bg: '#FAEEDA', color: '#854F0B', icon: 'ti-star' },
+        photos:    { bg: '#FBEAF0', color: '#993556', icon: 'ti-photo' },
+        video:     { bg: '#E6F1FB', color: '#185FA5', icon: 'ti-movie' },
+        audio:     { bg: '#f5f4fc', color: '#534AB7', icon: 'ti-music' },
+        mockups:   { bg: '#EAF3DE', color: '#3B6D11', icon: 'ti-brand-adobe' },
+      };
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 2500);
+      }
+
+      function updateSummary() {
+        var subtotal = cart.reduce(function (s, i) { return s + i.price * (i.qty || 1); }, 0);
+        var total = Math.max(0, subtotal - discount);
+        document.getElementById('s-subtotal').textContent = '$' + subtotal;
+        document.getElementById('s-discount').textContent = '–$' + discount;
+        document.getElementById('s-total').textContent = '$' + total;
+        subEl.textContent = cart.length === 0
+          ? 'Your cart is empty'
+          : cart.length + ' item' + (cart.length > 1 ? 's' : '') + ' in your cart';
+        document.getElementById('checkout-btn').disabled = cart.length === 0;
+        localStorage.setItem('fileshop_cart', JSON.stringify(cart));
+      }
+
+      function removeItem(idx) {
+        var name = cart[idx].name;
+        cart.splice(idx, 1);
+        renderCart();
+        showToast(name + ' removed from cart');
+      }
+
+      function renderCart() {
+        container.innerHTML = '';
+
+        if (cart.length === 0) {
+          container.innerHTML = `
+            <div class="empty">
+              <i class="ti ti-shopping-cart-off"></i>
+              <h3>Nothing here yet</h3>
+              <p>Browse thousands of premium digital files and add them to your cart.</p>
+              <a href="./index.html">Shop now</a>
+            </div>`;
+          document.getElementById('summary-box').style.opacity = '0.5';
+        } else {
+          document.getElementById('summary-box').style.opacity = '1';
+          var itemsDiv = document.createElement('div');
+          itemsDiv.className = 'cart-items';
+
+          cart.forEach(function (item, idx) {
+            var t = thumbStyles[item.cat] || thumbStyles['templates'];
+            var el = document.createElement('div');
+            el.className = 'cart-item';
+            el.innerHTML = `
+              <div class="item-thumb" style="background:${t.bg}">
+                <i class="ti ${t.icon}" style="color:${t.color}"></i>
+              </div>
+              <div class="item-info">
+                <div class="item-name">${item.name}</div>
+                <div class="item-type">${item.type || 'Digital file'}</div>
+              </div>
+              <span class="item-price">$${item.price}</span>
+              <button class="remove-btn" title="Remove" data-idx="${idx}">
+                <i class="ti ti-trash"></i>
+              </button>`;
+            itemsDiv.appendChild(el);
+          });
+
+          // Remove listeners
+          itemsDiv.querySelectorAll('.remove-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+              removeItem(parseInt(btn.dataset.idx));
+            });
+          });
+
+          container.appendChild(itemsDiv);
+        }
+
+        updateSummary();
+      }
+
+      // Coupon
+      document.getElementById('coupon-btn').addEventListener('click', function () {
+        var code = document.getElementById('coupon-input').value.trim().toUpperCase();
+        if (code === 'SAVE10') {
+          discount = 10; showToast('✓ Coupon applied — $10 off!');
+        } else if (code === 'HALF50') {
+          discount = Math.floor(cart.reduce(function (s, i) { return s + i.price; }, 0) / 2);
+          showToast('✓ 50% off applied!');
+        } else {
+          showToast('Invalid coupon code');
+        }
+        updateSummary();
+      });
+
+      // Checkout
+      document.getElementById('checkout-btn').addEventListener('click', function () {
+        if (cart.length === 0) return;
+        showToast('✓ Order placed! Check your email for download links.');
+        setTimeout(function () {
+          cart = [];
+          localStorage.setItem('fileshop_cart', '[]');
+          renderCart();
+        }, 2600);
+      });
+
+      renderCart();
+    </script>
+    <script src="./tracker.js"></script>
+  </body>
+</html>
