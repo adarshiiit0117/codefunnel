@@ -10,6 +10,15 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://codefunnel-m53f.vercel.app/"
+    ]
+  })
+);
 app.get("/api/health", (req, res) => {
   res.status(200).json({
     success: true,
