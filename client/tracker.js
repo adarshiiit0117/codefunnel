@@ -1,5 +1,5 @@
 (function () {
-  const API_URL = "http://localhost:5000/api/events";
+  const API_URL = "https://codefunnel.onrender.com/api/events";
 
   function getSessionId() {
     let sessionId = localStorage.getItem("cf_session_id");
